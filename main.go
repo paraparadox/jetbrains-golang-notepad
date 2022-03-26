@@ -83,6 +83,31 @@ func main() {
 			}
 			notes[number-1] = numberAndData[1]
 			fmt.Printf("[OK] The note at position %d was successfully updated\n", number)
+		case "delete":
+			input := strings.Split(line, " ")
+			if len(input) < 2 || input[1] == "" {
+				fmt.Println("[Error] Missing position argument")
+				break
+			}
+			number, err := strconv.ParseInt(commandAndData[1], 10, 64)
+			if err != nil {
+				fmt.Printf("[Error] Invalid position: %s\n", commandAndData[1])
+				break
+			}
+			if number < 1 || number > int64(n) {
+				fmt.Printf("[Error] Position %d is out of the boundaries [1, %d]\n", number, n)
+				break
+			}
+			if notes[number-1] == "" {
+				fmt.Println("[Error] There is nothing to delete")
+				break
+			}
+			for j := number - 1; j < int64(i)-1; j++ {
+				notes[j] = notes[j+1]
+			}
+			notes[i-1] = ""
+			i--
+			fmt.Printf("[OK] The note at position %d was successfully deleted\n", number)
 		default:
 			fmt.Println("[Error] Unknown command")
 		}
